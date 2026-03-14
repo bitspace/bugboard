@@ -67,12 +67,14 @@ const issueCountEl = document.getElementById('issue-count');
 const emptyStateEl = document.getElementById('empty-state');
 const issueDetailEl = document.getElementById('issue-detail');
 const searchInput = document.getElementById('search-input');
+const highSeverityToggle = document.getElementById('high-severity-toggle');
 
 // Initialize Dashboard
 function init() {
     statusFilter.addEventListener('change', filterIssues);
     severityFilter.addEventListener('change', filterIssues);
     searchInput.addEventListener('input', filterIssues);
+    highSeverityToggle.addEventListener('change', filterIssues);
     renderList();
 }
 
@@ -81,6 +83,7 @@ function filterIssues() {
     const status = statusFilter.value;
     const severity = severityFilter.value;
     const query = searchInput.value.toLowerCase();
+    const highSeverityOnly = highSeverityToggle.checked;
 
     currentIssues = mockIssues.filter(issue => {
         const matchStatus = status === 'All' || issue.status === status;
@@ -88,8 +91,10 @@ function filterIssues() {
         const matchSearch = issue.title.toLowerCase().includes(query) || 
                             issue.description.toLowerCase().includes(query) ||
                             issue.id.toLowerCase().includes(query);
-                            
-        return matchStatus && matchSeverity && matchSearch;
+        
+        const matchHighSeverityToggle = !highSeverityOnly || (issue.severity === 'High' || issue.severity === 'Critical');
+
+        return matchStatus && matchSeverity && matchSearch && matchHighSeverityToggle;
     });
 
     const isSelectedStillVisible = currentIssues.find(i => i.id === selectedIssueId);
