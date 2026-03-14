@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pymysql
+pydantic
+pytest
+pytest-playwright
+httpx

@@ -1,62 +1,5 @@
-// Mock data simulating issue representations
-const mockIssues = [
-    {
-        id: 'BUG-101',
-        title: 'Application crashes on startup when offline',
-        status: 'Open',
-        severity: 'Critical',
-        date: '2026-03-14',
-        reporter: 'Alice Smith',
-        description: 'When starting the application without an active internet connection, it crashes immediately with a NullPointerException in the NetworkManager module.\n\nSteps to reproduce:\n1. Disconnect from network.\n2. Launch app.\n3. Observe crash.\n\nExpected behavior: App should show an offline mode message instead of crashing completely.'
-    },
-    {
-        id: 'BUG-102',
-        title: 'Dark mode toggle icon does not update',
-        status: 'In Progress',
-        severity: 'Low',
-        date: '2026-03-13',
-        reporter: 'Bob Jones',
-        description: 'The moon/sun icon on the settings page stays as a moon even when the theme transitions to light mode. It functions correctly but visually is confusing to end-users.'
-    },
-    {
-        id: 'BUG-103',
-        title: 'Data export fails for payload > 50MB',
-        status: 'Open',
-        severity: 'High',
-        date: '2026-03-12',
-        reporter: 'Charlie Brown',
-        description: 'Exporting user analytics data times out if the resulting CSV exceeds 50MB. The server returns a 504 Gateway Timeout.\n\nSuggested fix: Implement chunked streaming for the export endpoint or run it as an async job that returns a download link later via webhook or websockets.'
-    },
-    {
-        id: 'BUG-104',
-        title: 'Typo in welcome email',
-        status: 'Closed',
-        severity: 'Low',
-        date: '2026-03-10',
-        reporter: 'Dana White',
-        description: 'The onboarding email spells "Dashboard" as "Dashbord". This needs to be corrected in the localization and email templates.'
-    },
-    {
-        id: 'BUG-105',
-        title: 'Memory leak in real-time graph component',
-        status: 'In Progress',
-        severity: 'Critical',
-        date: '2026-03-14',
-        reporter: 'Eve Adams',
-        description: 'The real-time metrics graph does not clear old WebGL buffers, causing the browser tab memory to balloon over a few hours until it crashes the tab.\n\nRequires an explicit cleanup on component unmount and taking care of the buffer arrays correctly.'
-    },
-    {
-        id: 'BUG-106',
-        title: 'Avatar upload accepts non-image files',
-        status: 'Open',
-        severity: 'Medium',
-        date: '2026-03-14',
-        reporter: 'Frank Castle',
-        description: 'Users can upload .exe or .pdf files as their profile picture. The client-side validation is missing and server-side just saves it. This is a potential security issue that needs fixing before production release.'
-    }
-];
-
-let currentIssues = [...mockIssues];
+let allIssues = [];
+let currentIssues = [];
 let selectedIssueId = null;
 
 // DOM Elements
@@ -70,12 +13,24 @@ const searchInput = document.getElementById('search-input');
 const highSeverityToggle = document.getElementById('high-severity-toggle');
 
 // Initialize Dashboard
-function init() {
+async function init() {
     statusFilter.addEventListener('change', filterIssues);
     severityFilter.addEventListener('change', filterIssues);
     searchInput.addEventListener('input', filterIssues);
     highSeverityToggle.addEventListener('change', filterIssues);
-    renderList();
+    await fetchIssues();
+}
+
+async function fetchIssues() {
+    try {
+        const response = await fetch('/api/issues');
+        if (!response.ok) throw new Error('Failed to fetch issues');
+        allIssues = await response.json();
+        filterIssues();
+    } catch (error) {
+        console.error('Error fetching issues:', error);
+        issueListEl.innerHTML = `<div class="list-empty-state"><p>Error connecting to API</p></div>`;
+    }
 }
 
 // Function to filter issues by dropdown matches
@@ -85,7 +40,7 @@ function filterIssues() {
     const query = searchInput.value.toLowerCase();
     const highSeverityOnly = highSeverityToggle.checked;
 
-    currentIssues = mockIssues.filter(issue => {
+    currentIssues = allIssues.filter(issue => {
         const matchStatus = status === 'All' || issue.status === status;
         const matchSeverity = severity === 'All' || issue.severity === severity;
         const matchSearch = issue.title.toLowerCase().includes(query) || 
@@ -170,7 +125,7 @@ function selectIssue(id) {
     selectedIssueId = id;
     renderList(); // Re-render to highlight active item
     
-    const issue = mockIssues.find(i => i.id === id);
+    const issue = allIssues.find(i => i.id === id);
     if (issue) {
         renderDetail(issue);
     }
