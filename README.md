@@ -1,45 +1,68 @@
 # Bugboard - Issue Triage
 
-A tiny, static issue-triage dashboard created with plain HTML, CSS, and Vanilla JavaScript.
+A modern issue-triage dashboard built with a Vanilla JavaScript frontend, a Python FastAPI backend, and backed by a Dolt version-controlled database.
 
 ![Bugboard Screenshot](./screenshot.png)
 
 ## Features
 
-- **Framework-Free**: Built entirely with vanilla web technologies, requiring no build tools or complicated configurations.
 - **Glassmorphism Design**: Minimalist and modern aesthetic utilizing dark mode, smooth background gradients, and frosted-glass panels (`backdrop-filter`).
-- **Dynamic Filtering**: Quickly filter mock issues by `Status` (Open, In Progress, Closed) or `Severity` (Low, Medium, High, Critical) using intuitive top-level dropdowns.
-- **Auto-Selection Logic**: Selecting a filter dynamically auto-selects the top issue from the new working set, preventing disconnected or dead UI states.
-- **Smart Empty States**: If filter combinations result in zero visible issues, the dashboard displays appropriate visual feedback to alert the user.
+- **Dynamic Filtering**: Quickly filter issues by `Status`, `Severity`, or using the search bar.
+- **FastAPI Backend**: A lightweight, lightning-fast Python API providing RESTful CRUD operations.
+- **Dolt Database**: Data is stored securely in a Git-backed, MySQL-compatible database.
+- **Comprehensive Testing**: Fully tested using `pytest` for backend routing and `playwright` for end-to-end browser testing.
 
 ## Getting Started
 
-Because it contains zero dependencies, you can run this instantly:
+### Prerequisites
+- Python 3.10+
+- [Dolt](https://github.com/dolthub/dolt) installed globally.
 
-### Method 1: Local Development Server (Recommended)
+### Installation
 
-You can spawn a quick HTTP server using Python:
+1. Clone the repository and navigate inside:
+   ```bash
+   cd bugboard
+   ```
 
+2. Set up a Python virtual environment and install dependencies:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install -r backend/requirements.txt
+   playwright install chromium
+   ```
+
+### Running the Application
+
+1. **Start the Database**:
+   ```bash
+   ./scripts/run_dolt_server.sh
+   ```
+
+2. **Start the Backend server** (in a new terminal):
+   ```bash
+   source venv/bin/activate
+   uvicorn backend.main:app
+   ```
+
+3. Open your browser and navigate to `http://localhost:8000`.
+
+## Testing
+
+The project includes an automated test framework evaluating the server backend and the UI integration.
+
+To run the entire test suite (API and E2E browser tests):
 ```bash
-cd bugboard
-python3 -m http.server 8080
+./scripts/run_tests.sh
 ```
-
-Then navigate to `http://localhost:8080` in your web browser.
-
-### Method 2: Direct File Execution
-
-You can easily interact with Bugboard by just double-clicking `index.html` from your file explorer to open it up in any modern browser.
 
 ## Tech Stack
 
-- **HTML5**: Semantic tags establishing the core app shell structure.
-- **CSS3**: Variables (Custom Properties) managing design tokens, grid/flexbox based layouts, hover interactive states, and CSS animation (`@keyframes`).
-- **JavaScript (ES6+)**: Data filtering, DOM element creation (`document.createElement`), and event-based dynamic DOM mutations.
-
-## Mock Data Simulation
-
-The project uses an in-memory javascript array of mock objects defined within `script.js` to simulate a JSON payload or REST API response. It allows robust testing of list updates and string injections without connecting to a real database.
+- **Frontend**: HTML5, CSS3, Vanilla JavaScript (ES6+), Fetch API
+- **Backend API**: Python, FastAPI, Uvicorn, PyMySQL
+- **Database**: Dolt (MySQL-compatible)
+- **Testing**: Pytest, Pytest-Playwright, HTTPX
 
 ## License
 
