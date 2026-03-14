@@ -188,6 +188,34 @@ select option {
     border-radius: 6px;
 }
 
+/* Empty State for List */
+.list-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-secondary);
+    gap: 12px;
+    padding: 32px 16px;
+    text-align: center;
+}
+
+.list-empty-state .empty-icon {
+    font-size: 32px;
+    opacity: 0.5;
+}
+
+.list-empty-state p {
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.list-empty-state span {
+    font-size: 13px;
+    opacity: 0.7;
+}
+
 /* Issue Card */
 .issue-card {
     padding: 16px;

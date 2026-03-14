@@ -126,7 +126,13 @@ function renderList() {
     issueCountEl.textContent = currentIssues.length;
 
     if (currentIssues.length === 0) {
-        issueListEl.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--text-secondary);">No issues found matching filters.</div>';
+        issueListEl.innerHTML = `
+            <div class="list-empty-state">
+                <div class="empty-icon">🔍</div>
+                <p>No issues found</p>
+                <span>Try adjusting your filters or search</span>
+            </div>
+        `;
         return;
     }
 
