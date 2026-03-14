@@ -100,7 +100,7 @@ body {
     font-weight: 500;
 }
 
-select {
+select, .search-input {
     background: rgba(0, 0, 0, 0.2);
     color: var(--text-primary);
     border: 1px solid var(--glass-border);
@@ -108,11 +108,22 @@ select {
     border-radius: 8px;
     font-size: 14px;
     outline: none;
-    cursor: pointer;
     transition: all 0.2s ease;
 }
 
-select:hover, select:focus {
+select {
+    cursor: pointer;
+}
+
+.search-input {
+    width: 200px;
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+select:hover, select:focus, .search-input:focus {
     border-color: var(--accent-color);
     box-shadow: var(--accent-glow);
 }

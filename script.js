@@ -66,11 +66,13 @@ const issueListEl = document.getElementById('issue-list');
 const issueCountEl = document.getElementById('issue-count');
 const emptyStateEl = document.getElementById('empty-state');
 const issueDetailEl = document.getElementById('issue-detail');
+const searchInput = document.getElementById('search-input');
 
 // Initialize Dashboard
 function init() {
     statusFilter.addEventListener('change', filterIssues);
     severityFilter.addEventListener('change', filterIssues);
+    searchInput.addEventListener('input', filterIssues);
     renderList();
 }
 
@@ -78,11 +80,16 @@ function init() {
 function filterIssues() {
     const status = statusFilter.value;
     const severity = severityFilter.value;
+    const query = searchInput.value.toLowerCase();
 
     currentIssues = mockIssues.filter(issue => {
         const matchStatus = status === 'All' || issue.status === status;
         const matchSeverity = severity === 'All' || issue.severity === severity;
-        return matchStatus && matchSeverity;
+        const matchSearch = issue.title.toLowerCase().includes(query) || 
+                            issue.description.toLowerCase().includes(query) ||
+                            issue.id.toLowerCase().includes(query);
+                            
+        return matchStatus && matchSeverity && matchSearch;
     });
 
     const isSelectedStillVisible = currentIssues.find(i => i.id === selectedIssueId);
