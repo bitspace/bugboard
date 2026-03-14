@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugboard - Issue Triage</title>
+    <!-- Use Inter font for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation / Filters -->
+        <header class="glass-header">
+            <div class="logo">
+                <span class="logo-icon">💠</span>
+                <h1>Bugboard</h1>
+            </div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="status-filter">Status</label>
+                    <select id="status-filter">
+                        <option value="All">All</option>
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="severity-filter">Severity</label>
+                    <select id="severity-filter">
+                        <option value="All">All</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace Area -->
+        <main class="content-area">
+            <!-- Left Panel: Issue List -->
+            <aside class="issue-list-container glass-panel">
+                <div class="list-header">
+                    <h2>Issues</h2>
+                    <span class="issue-count" id="issue-count">0</span>
+                </div>
+                <div class="issue-list" id="issue-list">
+                    <!-- Issue cards will be dynamically injected via JS -->
+                </div>
+            </aside>
+
+            <!-- Right Panel: Issue Details -->
+            <section class="issue-detail-container glass-panel">
+                <!-- Shown when no issue is selected -->
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-icon">📂</div>
+                    <p>Select an issue to view details</p>
+                </div>
+                
+                <!-- Expanded view populated by JS -->
+                <div class="issue-detail hidden" id="issue-detail">
+                    <!-- Issue details will be injected via JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
