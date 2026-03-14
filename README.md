@@ -1,5 +1,7 @@
 # Bugboard - Issue Triage
 
+This is not intended to be any kind of real product. It's a project to allow me to exercise the features and workflow of Google Antigravity.
+
 A modern issue-triage dashboard built with a Vanilla JavaScript frontend, a Python FastAPI backend, and backed by a Dolt version-controlled database.
 
 ![Bugboard Screenshot](./screenshot.png)
